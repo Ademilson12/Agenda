@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "model-header.html" %} <!-- Vamos trazer as configurações que fizemos no header -->
+</head>
+<body>
+    {% block content %} {% endblock %} <!-- Configuração do meio da página, qualquer elemento inserido vai ficar entre o footer e o header -->
+    {% include "model-footer.html" %} <!-- Vamos trazer as configurações que fizemos no footer -->
+</body>
+</html>

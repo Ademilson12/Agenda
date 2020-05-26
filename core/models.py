@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+import time
+
 # Create your models here.
 
 
@@ -15,3 +17,6 @@ class Evento(models.Model):
         
     def __str__(self):
         return self.titulo
+    
+    def data_brasil(self):
+        return self.data_evento.strftime('%d/%m/%Y %H:%M')

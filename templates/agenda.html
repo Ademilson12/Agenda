@@ -1,0 +1,11 @@
+{% extends "model-page.html" %} <!-- Trazendo todas as configurações do model-page para o index-->
+
+{% block content %}  <!-- Envolvendo o bloco -->
+    <h2>Agendamentos</h2>
+
+    <ul style="font-size:18px">
+    {% for evento in eventos %}
+        <li>{{ evento.titulo }} - {{ evento.data_brasil }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %} <!-- Finalizando o bloco -->
