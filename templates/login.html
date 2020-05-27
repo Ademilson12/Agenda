@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="{% static '/style/style.css' %}">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda</title>
+</head>
+<body>
+    <div class="sidenav">
+        <div class="login-main-text">
+            <h2>Agendamento<br> Pagina de Login </h2>
+            <p>Seja bem-vindo</p>
+        </div>
+    </div>
+    <div class="main">
+        <div class="col-md-6 col-sm-12">
+            <div class="login-form">
+                <form action="submit" method="POST"> <!--Token de segurança--> {% csrf_token  %}<!--Token de segurança -->
+
+                {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Erro! </strong>{{message}}
+                    </div>
+                {% endfor %}
+
+                    <div class="form-group">
+                    <label>User Name</label>
+                    <input name="username" type="text" class="form-control" placeholder="UserName">
+                    </div>
+                    <div class="form-group">
+                    <label>Password</label>
+                    <input name="password" type="password" class="form-control" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-black">Login</button>
+                </form>
+                    
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
