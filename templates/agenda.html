@@ -3,6 +3,10 @@
 {% block content %}  <!-- Envolvendo o bloco -->
     <h2>Agendamentos</h2>
 
+    <a href="evento/">
+        <button type="button">Novo Evento</button>
+    </a>
+
     <ul style="font-size:18px">
     {% for evento in eventos %}
         <li>{{ evento.titulo }} - {{ evento.data_brasil }}</li>
