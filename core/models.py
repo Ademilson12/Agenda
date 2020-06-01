@@ -20,3 +20,6 @@ class Evento(models.Model):
     
     def data_brasil(self):
         return self.data_evento.strftime('%d/%m/%Y %H:%M')
+    
+    def get_data_input_evento(self):   # Configuramos para mandar a data no formato de string
+        return self.data_evento.strftime('%Y-%m-%dT%H:%M')

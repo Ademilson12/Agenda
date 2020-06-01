@@ -7,18 +7,19 @@
 
 <form action="submit" method="POST"> <!--Token de seguranca-->  {% csrf_token  %} <!--Token de seguranca-->
     <label>Titulo:</label>
+    <input type="number" name="id_evento" value="{{ evento.id }}" hidden> <!-- Criamos o botão para o id na tela e deixamos invisivel-->
     <br>
-    <input type="text" name="titulo" size="24px">
+    <input type="text" name="titulo" size="24px" value="{{evento.titulo}}">
     <br>
 
     <label>Data do Evento:</label>
     <br>
-    <input type="datetime-local" name="data_evento" size="24px">
+    <input type="datetime-local" name="data_evento" size="24px" value="{{evento.get_data_input_evento}}" >
     <br>
 
     <label>Descrição:</label>
     <br>
-    <textarea name="descricao"  rows="5" cols="24px"></textarea>
+    <textarea name="descricao"  rows="5" cols="24px">{{evento.descricao}}</textarea>
     <br><br>
 
 
@@ -27,9 +28,7 @@
     <a href="/">    
         <button type="button" name="cancelar">Cancelar</button>
     </a>
-
     <!--<button type="reset">Resetar</button>-->
-
 </form>
 
     

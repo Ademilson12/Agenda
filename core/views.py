@@ -37,7 +37,11 @@ def lista_eventos(request):
 
 @login_required(login_url='/login/')
 def evento(request):
-    return render(request, 'evento.html')
+    id_evento = request.GET.get('id')
+    dados = {} # Dicionário vazio para receber o evento
+    if id_evento: 
+        dados['evento'] = Evento.objects.get(id=id_evento) # Se ele encontrar informações no objeto evento ele vai preecher com os dados
+    return render(request, 'evento.html', dados)
 
 @login_required(login_url='/login/')
 def submit_evento(request):
@@ -46,8 +50,32 @@ def submit_evento(request):
         titulo = request.POST.get('titulo')
         data_evento = request.POST.get('data_evento')
         descricao = request.POST.get('descricao')
-        Evento.objects.create(titulo=titulo,
-                            data_evento=data_evento,
-                            descricao=descricao,
-                            usuario=usuario)
+        id_evento = request.POST.get('id_evento')
+        
+        if id_evento: # Se o id do evento existir, ele faz as verificações abaixo
+            evento = Evento.objects.get(id=id_evento)
+            if evento.usuario == usuario:
+                evento.titulo = titulo
+                evento.descricao = descricao
+                evento.data_evento = data_evento 
+                evento.save()
+        
+        #if id_evento: # Se o evento existir ele vai editar os dados, manter o id e salvar
+        #    Evento.objects.filter(id=id_evento).update(titulo=titulo,
+        #                                            data_evento=data_evento,
+        #                                            descricao=descricao)    
+        
+        else: # Se não existir ele vai criar um novo evento com um novo id
+            Evento.objects.create(titulo=titulo,
+                                data_evento=data_evento,
+                                descricao=descricao,
+                                usuario=usuario)
     return redirect('/')   
+
+@login_required(login_url='/login/')
+def delete_evento(request, id_evento): # Recebe um request e o id do evento
+    usuario = request.user
+    evento = Evento.objects.get(id=id_evento) # Informa o id do evento e manda o delete
+    if usuario == evento.usuario: # Validação para verificar se o usuário é dono do evento para deleção
+        evento.delete() # Caso o usuário seja o criador do evento ele vai deletar
+    return redirect('/')  # Retorna para página principal
