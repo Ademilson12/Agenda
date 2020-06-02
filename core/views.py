@@ -1,9 +1,11 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect  # redirect # importamos o redirect para utilizar no redirecionamento de paginas
 from core.models import Evento # Importando Evento para utilização dos models
 from django.contrib.auth.decorators import login_required # Decorador para forçar o usuário a logar
 from django.contrib.auth import authenticate, login, logout # Importamos os validadores
 from django.contrib import messages
-
+from datetime import datetime, timedelta
+from django.http.response import Http404, JsonResponse
 # Create your views here.
 
 #def index(request): # Quando não for informado o index, ele vai ser redirecionado para agenda
@@ -31,7 +33,9 @@ def submit_login(request):
 @login_required(login_url='/login/') # Para que as informações abaixo sejam apresentadas você precisa estar logado
 def lista_eventos(request):
     usuario = request.user
-    evento = Evento.objects.filter(usuario=usuario) # Definindo que eu quero trazer apenas o id 1
+    data_atual = datetime.now() - timedelta(hours=2)
+    evento = Evento.objects.filter(usuario=usuario,
+                                    data_evento__gt=data_atual) # Definindo que eu quero trazer apenas o id 1
     dados = {'eventos':evento} # Dicionário
     return render(request, 'agenda.html', dados) # Trazendo o response que foi configurar como um dicionário
 
@@ -75,7 +79,24 @@ def submit_evento(request):
 @login_required(login_url='/login/')
 def delete_evento(request, id_evento): # Recebe um request e o id do evento
     usuario = request.user
-    evento = Evento.objects.get(id=id_evento) # Informa o id do evento e manda o delete
+    try:
+        evento = Evento.objects.get(id=id_evento) # Informa o id do evento e manda o delete
+    except Exception:
+        raise Http404()
     if usuario == evento.usuario: # Validação para verificar se o usuário é dono do evento para deleção
         evento.delete() # Caso o usuário seja o criador do evento ele vai deletar
+    else:
+        raise Http404()            
     return redirect('/')  # Retorna para página principal
+
+
+def json_lista_evento(request, id_usuario):
+    try:
+        usuario = User.objects.get(id=id_usuario)
+        evento = Evento.objects.filter(usuario=usuario).values('id','titulo') # Informando quais arquivos quero mostrar no formato js
+        return JsonResponse(list(evento), safe=False)
+    except Exception:
+        raise Http404()
+    return redirect('/')
+    
+    
